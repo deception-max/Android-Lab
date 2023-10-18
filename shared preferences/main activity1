@@ -1,47 +1,57 @@
+package com.example.sharedpreferences;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.Toast;
+
 public class MainActivity extends AppCompatActivity {
-    EditText name,mail;
-    Button submit;
-    SharedPreferences sharedPref;
-    String spn="mypref";
-    String keyname="name";
-    String keymail="mail";
+    EditText name,email;
+    Button btn;
+    SharedPreferences sharedPreferences;
+
+     static final  String SHARED_PREF_NAME= "mypref";
+    static final  String KEY_NAME= "name";
+    static final  String KEY_EMAIL= "email";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         name=findViewById(R.id.name);
-        mail=findViewById(R.id.email);
-        submit=findViewById(R.id.submit);
-        sharedPref=getSharedPreferences("Registration_info", Context.MODE_PRIVATE);
-        String n=sharedPref.getString(keyname,null);
-        String m=sharedPref.getString(keymail,null);
-        if(n!=null || m!=null )
-        {
-            name.setText(n);
+        email=findViewById(R.id.email);
+        btn=findViewById(R.id.btn);
+        sharedPreferences=getSharedPreferences(SHARED_PREF_NAME,MODE_PRIVATE);
+
+        String name1=sharedPreferences.getString(KEY_NAME,null);
+        if(name1 !=null){
+            Intent intent=new Intent(MainActivity.this,Mainactivity3.class);
+            startActivity(intent);
         }
 
-        submit.setOnClickListener(new View.OnClickListener() {
+        btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(name.getText().toString().isEmpty())
-                {
-                    name.setError("this field can't be blank");
-                    String str = name.getText().toString();
-                }
-                if(mail.getText().toString().isEmpty())
-                {
-                    mail.setError("this field can't be blank");
+                SharedPreferences.Editor editor=sharedPreferences.edit();
+                editor.putString(KEY_NAME,name.getText().toString());
+                editor.putString(KEY_EMAIL,email.getText().toString());
+                editor.apply();
+                Intent intent=new Intent(MainActivity.this,Mainactivity3.class);
+                startActivity(intent);
 
-                }
+                Toast.makeText(MainActivity.this, "Login Successful", Toast.LENGTH_SHORT).show();
 
-                else {
-                    Intent i = new Intent(getApplicationContext(), MainActivity2.class);
-                    String str = name.getText().toString();
-                    i.putExtra("user", str);
-                    startActivity(i);
-                }
             }
         });
+
     }
-    }
+}
