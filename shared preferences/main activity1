@@ -1,0 +1,47 @@
+public class MainActivity extends AppCompatActivity {
+    EditText name,mail;
+    Button submit;
+    SharedPreferences sharedPref;
+    String spn="mypref";
+    String keyname="name";
+    String keymail="mail";
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        name=findViewById(R.id.name);
+        mail=findViewById(R.id.email);
+        submit=findViewById(R.id.submit);
+        sharedPref=getSharedPreferences("Registration_info", Context.MODE_PRIVATE);
+        String n=sharedPref.getString(keyname,null);
+        String m=sharedPref.getString(keymail,null);
+        if(n!=null || m!=null )
+        {
+            name.setText(n);
+        }
+
+        submit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(name.getText().toString().isEmpty())
+                {
+                    name.setError("this field can't be blank");
+                    String str = name.getText().toString();
+                }
+                if(mail.getText().toString().isEmpty())
+                {
+                    mail.setError("this field can't be blank");
+
+                }
+
+                else {
+                    Intent i = new Intent(getApplicationContext(), MainActivity2.class);
+                    String str = name.getText().toString();
+                    i.putExtra("user", str);
+                    startActivity(i);
+                }
+            }
+        });
+    }
+    }
